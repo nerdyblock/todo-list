@@ -15,12 +15,23 @@
             <button class="add-task">&plus;</button>
         </div>
     </header>
-    <nav>
-        <button id="inbox">Inbox</button>
-        <button id="today">Today</button>
-        <button id="upcoming">Upcoming</button>
-        <button id="projects">Projects</button>
-    </nav>
-    <div id="todo" class="todo-container"></div>
+    <div class="content">
+        <div class="nav">
+            <button id="inbox">Inbox</button>
+            <button id="today">Today</button>
+            <button id="upcoming">Upcoming</button>
+            <button id="projects">Projects</button>
+        </div>        
+        <div id="todo" class="todo-container"></div>
+    </div>
+    <div class="form-container">
+        <form action="">
+            <input id="task" type="text" placeholder="Task" required>
+            <input type="date" name="date" id="date" required>
+            <textarea name="description" id="description" cols="20" rows="10" placeholder="description"></textarea>
+            <button id="add">Add</button>
+        </form>
+    </div>
+    <div class="overlay"></div>
 </body>
 </html>
