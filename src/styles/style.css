@@ -35,6 +35,25 @@ button {
     font-size: 1.6rem;
 }
 
+.title-container {
+    display: flex;
+    gap: 1em;
+}
+
+.task {
+    display: flex;
+    gap: 2em;
+    justify-content: space-between;
+    padding: 5px 180px 5px 0px;
+}
+
+.left,
+.right {
+    display: flex;
+    gap: 2em;
+    align-items: center;
+}
+
 .form-container {
     position: fixed;
     top: 50%;
@@ -50,6 +69,14 @@ button {
     justify-content: center;
     align-items: center;
     z-index: 10;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
 }
 
 .form-container.active {
