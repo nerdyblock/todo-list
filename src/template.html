@@ -9,7 +9,7 @@
 <body>
     <header>
         <div>
-            <h1>TO-DO</h1>
+            <h1>Todo</h1>
         </div>
         <div>
             <button class="add-task">&plus;</button>
@@ -21,6 +21,7 @@
             <button id="today">Today</button>
             <button id="upcoming">Upcoming</button>
             <button id="projects">Projects</button>
+            <div class="project-container"></div>
         </div>        
         <div id="todo" class="todo-container"></div>
     </div>
@@ -29,7 +30,7 @@
             <input id="task" type="text" placeholder="Task" required>
             <input type="date" name="date" id="date" required>
             <textarea name="description" id="description" cols="20" rows="10" placeholder="description"></textarea>
-            <button id="add">Add</button>
+            <button type="button" id="add">Add</button>
         </form>
     </div>
     <div class="overlay"></div>
