@@ -3,8 +3,6 @@ import Task from "./task";
 const task = document.getElementById('task');
 const date = document.getElementById('date');
 
-
-
 function todoData() {
     let newTask = new Task(task.value, date.value, Math.random().toString(16).slice(2));
     return  {
@@ -26,3 +24,13 @@ export function removeTaskFromStorage(index) {
     localStorage.setItem('task', JSON.stringify(taskList));
 }   
 
+export function editTaskInStorage(id, editTask, editDate) {
+    let taskList = JSON.parse(localStorage.getItem('task'));
+    taskList.forEach(item => {
+        if(item.taskId === id) {
+            item.title = editTask;
+            item.dueDate = editDate;
+        }
+    });
+    localStorage.setItem('task', JSON.stringify(taskList));
+}
