@@ -1,4 +1,7 @@
+import { editTaskInStorage } from "./storage";
+
 const todo = document.getElementById('todo');
+
 
 function generateTaskUi() 
 {
@@ -9,6 +12,7 @@ function generateTaskUi()
                 <p class="title" data-title></p>
             </div>
             <div class="left">
+                <button id="edit">edit</button>
                 <p class="date" data-date></p>
                 <button class="task-delete" data-delete>&#10060;</button>
             </div>
@@ -37,4 +41,21 @@ export function uiShowTask() {
         dom.duedate.textContent = element.dueDate;
         dom.title.setAttribute('id', element.taskId);
     });
+}
+
+export function uiShowEditForm() {
+    const editForm = document.querySelector('.edit-task-form');
+    let task = this.closest('.task');
+    let title = task.querySelector('[data-title]').textContent;
+    let date = task.querySelector('[data-date').textContent;
+    let id = task.querySelector('[data-title]').getAttribute('id');
+    let editUi = `
+        <form class="edit-form">
+            <input id="task" data-id="${id}" type="text" placeholder="Task" value="${title}" required>
+            <input type="date" name="date" id="date" value="${date}" required>
+            <textarea name="description" id="description" cols="20" rows="10" placeholder="description"></textarea>
+            <button id="save-changes">Save Changes</button>
+        </form>
+    `
+    editForm.innerHTML = editUi;
 }
