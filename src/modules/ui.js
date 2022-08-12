@@ -1,7 +1,4 @@
-import { editTaskInStorage } from "./storage";
-
 const todo = document.getElementById('todo');
-
 
 function generateTaskUi() 
 {
@@ -37,9 +34,9 @@ export function uiShowTask() {
     todo.innerHTML = '';
     taskList.forEach(element => {
         let dom = selectDomElements();
-        dom.title.innerText = element.title;
+        dom.title.textContent = element.name;
         dom.duedate.textContent = element.dueDate;
-        dom.title.setAttribute('id', element.taskId);
+        dom.title.setAttribute('id', element.id);
     });
 }
 
