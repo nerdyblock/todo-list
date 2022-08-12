@@ -5,8 +5,7 @@ import { uiShowTask, uiShowEditForm} from './modules/ui';
 const add = document.getElementById('add');
 
 add.addEventListener('click', onTaskSubmit);
-// add.addEventListener('click', addTaskToStorage);
-// add.addEventListener('click', uiShowTask);
+
 document.addEventListener('click', function(e) {
     if(e.target.id === "save-changes"){
         let taskParent = document.querySelector('.edit-form');
@@ -45,18 +44,6 @@ function selectEditandDeleteTask() {
     todo.querySelectorAll('#edit').forEach(item => {
         item.addEventListener('click', uiShowEditForm)
         item.addEventListener('click', function() {
-            // const saveChanges = document.getElementById('save-changes');
-            // saveChanges.addEventListener('click', function() {
-            //     let taskParent = document.querySelector('.edit-form');
-            //     let editTask = taskParent.querySelector('#task');
-            //     let editDate = taskParent.querySelector('#date');
-            //     let id = editTask.dataset.id
-            //     if(editTask.value !== '' && editDate.value !== '') {
-            //         editTaskInStorage(id, editTask.value, editDate.value);
-            //         closeForm();
-            //     }
-            // });
-
             overlay.classList.add('active');
             document.querySelector('.edit-task-form').classList.add('active');
         });
@@ -67,11 +54,13 @@ function removeTask(e) {
     let taskToBeDeleted = e.target.closest('.task');
     let title = taskToBeDeleted.querySelector('.title');
     let idToBeDeleted = title.getAttribute('id');
-    JSON.parse(localStorage.getItem('task')).forEach((item, i) => {
-        if(item.taskId === idToBeDeleted) {
-            removeTaskFromStorage(i);
-        }   
-    });
+
+    removeTaskFromStorage(idToBeDeleted);
+    // JSON.parse(localStorage.getItem('task')).forEach((item, i) => {
+    //     if(item.id === idToBeDeleted) {
+    //         removeTaskFromStorage(i);
+    //     }   
+    // });
     uiShowTask();
 }
 
