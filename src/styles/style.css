@@ -29,10 +29,20 @@ header {
     grid-template-columns: 1fr 4fr;
 }
 
-button {
+.nav > button {
     border: none;
     background: #fff;
     font-size: 1.6rem;
+}
+
+.add-project-input {
+    display: flex;
+    flex-direction: column;
+    transform: scale(0);
+}
+
+.add-project-input.active {
+    transform: scale(1);
 }
 
 .title-container {
@@ -54,7 +64,8 @@ button {
     align-items: center;
 }
 
-.form-container {
+.form-container,
+.edit-task-form{
     position: fixed;
     top: 50%;
     left: 50%;
@@ -79,7 +90,8 @@ form {
     align-items: center;
 }
 
-.form-container.active {
+.form-container.active,
+.edit-task-form.active{
     transform: translate(-50%, -50%) scale(1);
 }
 
