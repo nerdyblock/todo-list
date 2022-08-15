@@ -64,6 +64,25 @@ function removeTask(e) {
     uiShowTask();
 }
 
+
+// project form
+const addProjectButton = document.querySelector('.add-project');
+const addProjectInput = document.querySelector('.add-project-input');
+addProjectButton.addEventListener('click', openProjectForm);
+const cancelProject = document.querySelector('.cancel-project');
+cancelProject.addEventListener('click', closeProjectForm)
+
+
+function openProjectForm() {    
+    addProjectInput.classList.add('active');
+}
+
+function closeProjectForm() {
+    addProjectInput.classList.remove('active');
+}
+
+
+// pop up form
 const addTaskButton = document.querySelector('.add-task');
 const overlay = document.querySelector('.overlay');
 const addTaskForm = document.querySelector('.form-container');
