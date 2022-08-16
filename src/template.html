@@ -22,10 +22,11 @@
             <button id="upcoming">Upcoming</button>
             <button id="projects">Projects</button>
             <div class="project-container">
+                <div class="project-list-container"></div>
                 <div class="add-project-input">
                     <input id="project-name" type="text" required>
                     <div class="button-container">
-                        <button>Add</button>
+                        <button class="add-project-button">Add</button>
                         <button class="cancel-project">Cancel</button>
                     </div>
                 </div>
@@ -38,6 +39,9 @@
         <form action="">
             <input id="task" type="text" placeholder="Task" required>
             <input type="date" name="date" id="date" required>
+            <select name="projects" id="projects">
+                <option value="inbox">Inbox</option>
+            </select>
             <textarea name="description" id="description" cols="20" rows="10" placeholder="description"></textarea>
             <button type="button" id="add">Add</button>
         </form>
