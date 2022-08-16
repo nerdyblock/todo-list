@@ -1,6 +1,6 @@
 import './styles/style.css';
-import {addTaskToStorage, removeTaskFromStorage, editTaskInStorage} from './modules/storage';
-import { uiShowTask, uiShowEditForm} from './modules/ui';
+import {addTaskToStorage, removeTaskFromStorage, editTaskInStorage, addProjectToStorage} from './modules/storage';
+import { uiShowTask, uiShowEditForm, uiShowProject} from './modules/ui';
 
 const add = document.getElementById('add');
 
@@ -66,12 +66,23 @@ function removeTask(e) {
 
 
 // project form
-const addProjectButton = document.querySelector('.add-project');
-const addProjectInput = document.querySelector('.add-project-input');
-addProjectButton.addEventListener('click', openProjectForm);
-const cancelProject = document.querySelector('.cancel-project');
-cancelProject.addEventListener('click', closeProjectForm)
 
+// localStorage.clear('project')
+
+const showProjectFormButton = document.querySelector('.add-project');
+const addProjectInput = document.querySelector('.add-project-input');
+showProjectFormButton.addEventListener('click', openProjectForm);
+const cancelProject = document.querySelector('.cancel-project');
+cancelProject.addEventListener('click', closeProjectForm);
+
+const addProjectButton = document.querySelector('.add-project-button');
+// addProjectButton.addEventListener('click', uiAddProject)
+
+addProjectButton.addEventListener('click', addProjectToStorage);
+addProjectButton.addEventListener('click', closeProjectForm);
+console.log(JSON.parse(localStorage.getItem('project')))
+addProjectButton.addEventListener('click', uiShowProject);
+document.addEventListener('DOMContentLoaded', uiShowProject);
 
 function openProjectForm() {    
     addProjectInput.classList.add('active');
