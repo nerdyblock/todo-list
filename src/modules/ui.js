@@ -1,4 +1,7 @@
+import { getListFromStorage } from "./storage";
+
 const todo = document.getElementById('todo');
+
 
 function generateTaskUi() 
 {
@@ -30,7 +33,7 @@ function selectDomElements() {
 }
 
 export function uiShowTask() {
-    let taskList = JSON.parse(localStorage.getItem('task'));
+    let taskList = getListFromStorage('task');
     todo.innerHTML = '';
     taskList.forEach(element => {
         let dom = selectDomElements();
@@ -55,4 +58,25 @@ export function uiShowEditForm() {
         </form>
     `
     editForm.innerHTML = editUi;
+}
+
+let projectContainer = document.querySelector('.project-list-container');
+
+function uiGenerateProject() {
+    projectContainer.innerHTML += `
+        <div class="project-item">
+            <h2 class="project-name"></h2>
+        </div>
+    `
+} 
+
+export function uiShowProject() {
+    let projectList = getListFromStorage('project');
+    projectContainer.innerHTML = "";
+    projectList.forEach(item => {
+        uiGenerateProject();
+        let projectName = document.querySelector('.project-list-container > .project-item:last-child .project-name');
+        
+        projectName.textContent = item.name;
+    })
 }
