@@ -52,7 +52,8 @@ export function addTaskToStorage() {
         return;
     }
 
-    let newTask = new Task(task.value, date.value, Math.random().toString(16).slice(2));
+    let newTask = new Task(task.value, date.value);
+    addTaskToProject(newTask);
     tasks.addTask(newTask);
     localStorage.setItem('task', JSON.stringify(tasks.getTasks()));
 
@@ -69,9 +70,9 @@ export function addTaskToStorage() {
     // localStorage.setItem('task', JSON.stringify(taskList));
 }
 
-export function removeTaskFromStorage(id) {
+export function removeTaskFromStorage(index) {
     // let tasks =  Storage.getTask();
-    tasks.deleteTask(id);
+    tasks.deleteTask(index);
     localStorage.setItem('task', JSON.stringify(tasks.getTasks()));
     
 
@@ -80,8 +81,8 @@ export function removeTaskFromStorage(id) {
     // localStorage.setItem('task', JSON.stringify(taskList));
 }   
 
-export function editTaskInStorage(id, editTask, editDate) {
-    tasks.editTask(id, editTask, editDate);
+export function editTaskInStorage(index, editTask, editDate) {
+    tasks.editTask(index, editTask, editDate);
     // let taskList = JSON.parse(localStorage.getItem('task'));
     // taskList.forEach(item => {
     //     if(item.taskId === id) {
@@ -107,6 +108,26 @@ export function addProjectToStorage() {
     localStorage.setItem('project', JSON.stringify(projects.getProjects()));
 }
 
-function addTaskToProject() {
+let currentProjectIndex = '';
 
+export function selectCurrentProject(index) {
+    if(index === '') {
+        currentProjectIndex = ''
+        return;
+    }
+
+    currentProjectIndex = index;
+    console.log(currentProjectIndex);
+}
+
+export function addTaskToProject(newTask) {
+    if(currentProjectIndex === '') {
+        return;
+    }
+
+    projects.getProject(currentProjectIndex).tasks.push(newTask);
+    // console.log(projects.getProjects())
+    localStorage.setItem('project', JSON.stringify(projects.getProjects()));
+    // let project = projects.getProject(currentProject);
+    // project.tasks();
 }
