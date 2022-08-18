@@ -9,7 +9,7 @@ function generateTaskUi()
         <div class="task">
             <div class="right">
                 <div class="status" data-status></div>
-                <p class="title" data-title></p>
+                <p class="title" data-key="" data-title></p>
             </div>
             <div class="left">
                 <button id="edit">edit</button>
@@ -35,11 +35,12 @@ function selectDomElements() {
 export function uiShowTask() {
     let taskList = getListFromStorage('task');
     todo.innerHTML = '';
-    taskList.forEach(element => {
+    taskList.forEach((element, index) => {
         let dom = selectDomElements();
         dom.title.textContent = element.name;
         dom.duedate.textContent = element.dueDate;
-        dom.title.setAttribute('id', element.id);
+        dom.title.dataset.key = index;
+        // dom.title.setAttribute('id', element.id);
     });
 }
 
@@ -48,10 +49,13 @@ export function uiShowEditForm() {
     let task = this.closest('.task');
     let title = task.querySelector('[data-title]').textContent;
     let date = task.querySelector('[data-date').textContent;
-    let id = task.querySelector('[data-title]').getAttribute('id');
+    // let id = task.querySelector('[data-title]').getAttribute('id');
+
+    let index = task.querySelector('[data-title]').dataset.key;
+
     let editUi = `
         <form class="edit-form">
-            <input id="task" data-id="${id}" type="text" placeholder="Task" value="${title}" required>
+            <input id="task" data-key="${index}" type="text" placeholder="Task" value="${title}" required>
             <input type="date" name="date" id="date" value="${date}" required>
             <textarea name="description" id="description" cols="20" rows="10" placeholder="description"></textarea>
             <button id="save-changes">Save Changes</button>
@@ -64,8 +68,8 @@ let projectContainer = document.querySelector('.project-list-container');
 
 function uiGenerateProject() {
     projectContainer.innerHTML += `
-        <div class="project-item">
-            <h2 class="project-name"></h2>
+        <div class="project-item" data-project>
+            <h2 class="project-name" data-key=""></h2>
         </div>
     `
 } 
@@ -73,10 +77,23 @@ function uiGenerateProject() {
 export function uiShowProject() {
     let projectList = getListFromStorage('project');
     projectContainer.innerHTML = "";
-    projectList.forEach(item => {
+    projectList.forEach((item, index) => {
         uiGenerateProject();
         let projectName = document.querySelector('.project-list-container > .project-item:last-child .project-name');
-        
         projectName.textContent = item.name;
+        projectName.dataset.key = index
+
+        projectName.parentElement.setAttribute('id', item.name);
+    });
+}
+
+export function uiShowProjectTasks(index) {
+    let taskList = getListFromStorage('project')[index].tasks
+    todo.innerHTML = '';
+    taskList.forEach(element => {
+        let dom = selectDomElements();
+        dom.title.textContent = element.name;
+        dom.duedate.textContent = element.dueDate;
+        dom.title.dataset.key = index;
     })
 }
