@@ -1,4 +1,4 @@
-import { getListFromStorage } from "./storage";
+import { getCurrentProjectIndex, getListFromStorage } from "./storage";
 
 const todo = document.getElementById('todo');
 
@@ -9,7 +9,7 @@ function generateTaskUi()
         <div class="task">
             <div class="right">
                 <div class="status" data-status></div>
-                <p class="title" data-key="" data-title></p>
+                <p class="title" data-key="" data-id="" data-title></p>
             </div>
             <div class="left">
                 <button id="edit">edit</button>
@@ -32,15 +32,29 @@ function selectDomElements() {
     };
 }
 
+function getCurrentTaskList() {
+    let taskList;
+    let currentProjectIndex = getCurrentProjectIndex();
+    if(currentProjectIndex === '') {
+        taskList = getListFromStorage('task');
+    }
+    else {
+        taskList = getListFromStorage('project')[currentProjectIndex].tasks;
+    }
+
+    return taskList;
+}
+
 export function uiShowTask() {
-    let taskList = getListFromStorage('task');
+    let taskList = getCurrentTaskList();
+    console.log(taskList)
     todo.innerHTML = '';
     taskList.forEach((element, index) => {
         let dom = selectDomElements();
         dom.title.textContent = element.name;
         dom.duedate.textContent = element.dueDate;
         dom.title.dataset.key = index;
-        // dom.title.setAttribute('id', element.id);
+        dom.title.dataset.id = element.id;
     });
 }
 
@@ -49,13 +63,13 @@ export function uiShowEditForm() {
     let task = this.closest('.task');
     let title = task.querySelector('[data-title]').textContent;
     let date = task.querySelector('[data-date').textContent;
-    // let id = task.querySelector('[data-title]').getAttribute('id');
+    let id = task.querySelector('[data-title]').dataset.id;
 
     let index = task.querySelector('[data-title]').dataset.key;
 
     let editUi = `
         <form class="edit-form">
-            <input id="task" data-key="${index}" type="text" placeholder="Task" value="${title}" required>
+            <input id="task" data-key="${index}" data-id="${id}" type="text" placeholder="Task" value="${title}" required>
             <input type="date" name="date" id="date" value="${date}" required>
             <textarea name="description" id="description" cols="20" rows="10" placeholder="description"></textarea>
             <button id="save-changes">Save Changes</button>
@@ -87,13 +101,13 @@ export function uiShowProject() {
     });
 }
 
-export function uiShowProjectTasks(index) {
-    let taskList = getListFromStorage('project')[index].tasks
-    todo.innerHTML = '';
-    taskList.forEach(element => {
-        let dom = selectDomElements();
-        dom.title.textContent = element.name;
-        dom.duedate.textContent = element.dueDate;
-        dom.title.dataset.key = index;
-    })
-}
+// export function uiShowProjectTasks(index) {
+//     let taskList = getListFromStorage('project')[index].tasks
+//     todo.innerHTML = '';
+//     taskList.forEach(element => {
+//         let dom = selectDomElements();
+//         dom.title.textContent = element.name;
+//         dom.duedate.textContent = element.dueDate;
+//         dom.title.dataset.key = index;
+//     })
+// }
