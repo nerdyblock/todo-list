@@ -3,8 +3,8 @@ import Project from "./project.js";
 import Task from "./task.js";
 import Todo from "./todo.js";
 
-const task = document.getElementById('task');
-const date = document.getElementById('date');
+const taskInput = document.getElementById('task');
+const dateInput = document.getElementById('date');
 
 export function getListFromStorage(itemName) {
     return JSON.parse(localStorage.getItem(itemName)) || [];
@@ -52,7 +52,7 @@ export function addTaskToStorage() {
         return;
     }
 
-    let newTask = new Task(task.value, date.value);
+    let newTask = new Task(taskInput.value, dateInput.value, (new Date()).getMilliseconds());
     addTaskToProject(newTask);
     tasks.addTask(newTask);
     localStorage.setItem('task', JSON.stringify(tasks.getTasks()));
@@ -111,23 +111,32 @@ export function addProjectToStorage() {
 let currentProjectIndex = '';
 
 export function selectCurrentProject(index) {
-    if(index === '') {
-        currentProjectIndex = ''
-        return;
-    }
+    // if(index === '') {
+    //     currentProjectIndex = index;
+    //     return;
+    // }
 
     currentProjectIndex = index;
-    console.log(currentProjectIndex);
+    // console.log(currentProjectIndex);
+}
+
+export function getCurrentProjectIndex() {
+    return currentProjectIndex;
 }
 
 export function addTaskToProject(newTask) {
     if(currentProjectIndex === '') {
         return;
     }
-
+    newTask.setProject(projects.getProject(currentProjectIndex).name)
     projects.getProject(currentProjectIndex).tasks.push(newTask);
     // console.log(projects.getProjects())
     localStorage.setItem('project', JSON.stringify(projects.getProjects()));
     // let project = projects.getProject(currentProject);
     // project.tasks();
+}
+
+export function deleteTaskFromProject(index) {
+    projects.deleteTask(index);
+    localStorage.setItem('project', JSON.stringify(projects.getProjects()));
 }
