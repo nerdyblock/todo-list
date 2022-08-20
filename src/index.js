@@ -1,5 +1,5 @@
 import './styles/style.css';
-import {addTaskToStorage, removeTaskFromStorage, editTaskInStorage, addProjectToStorage} from './modules/storage';
+import {addTaskToStorage, removeTaskFromStorage, editTaskInStorage, addProjectToStorage, selectCurrentProject, getCurrentProjectIndex, deleteTaskFromProject} from './modules/storage';
 import { uiShowTask, uiShowEditForm, uiShowProject} from './modules/ui';
 
 const add = document.getElementById('add');
@@ -10,10 +10,11 @@ document.addEventListener('click', function(e) {
     if(e.target.id === "save-changes"){
         let taskParent = document.querySelector('.edit-form');
         let editTask = taskParent.querySelector('#task');
-        let editDate = taskParent.querySelector('#date');
-        let id = editTask.dataset.id
+        let editDate = taskParent.querySelector('#date');   
+        // let id = editTask.dataset.id;
+        let index = editTask.dataset.key;
         if(editTask.value !== '' && editDate.value !== '') {
-            editTaskInStorage(id , editTask.value, editDate.value);
+            editTaskInStorage(index, editTask.value, editDate.value);
             closeForm();
         }
     }
@@ -53,9 +54,17 @@ function selectEditandDeleteTask() {
 function removeTask(e) {
     let taskToBeDeleted = e.target.closest('.task');
     let title = taskToBeDeleted.querySelector('.title');
-    let idToBeDeleted = title.getAttribute('id');
+    // let idToBeDeleted = title.getAttribute('id');
 
-    removeTaskFromStorage(idToBeDeleted);
+    let index = title.dataset.key;
+
+    if(getCurrentProjectIndex()) {
+        deleteTaskFromProject(index);
+        uiShowTask();
+        return;
+    }
+
+    removeTaskFromStorage(index);
     // JSON.parse(localStorage.getItem('task')).forEach((item, i) => {
     //     if(item.id === idToBeDeleted) {
     //         removeTaskFromStorage(i);
@@ -114,3 +123,17 @@ function closeForm() {
     // change this 
     document.querySelector('.edit-task-form').classList.remove('active'); 
 }
+
+document.querySelector('#inbox').addEventListener('click', function() {
+    selectCurrentProject('');
+    uiShowTask();
+});
+
+const projectListContainer = document.querySelector('.project-list-container');
+projectListContainer.addEventListener('click', function(e) {
+    // let selectedProject = e.target.closest('[data-project]').id;
+    let index = e.target.dataset.key;
+    selectCurrentProject(index);
+    uiShowTask();
+    // uiShowProjectTasks(index);
+})
