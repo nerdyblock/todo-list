@@ -21,12 +21,12 @@ class Storage {
     static getProject() {
         let projects = new ProjectList();
         let projectList = getListFromStorage('project');
-        // projectList.forEach(project => {
-        //     let newProject = new Project(project.name);
-        //     newProject.setTasks(project.tasks);
-        //     projects.addProject(newProject);
-        // });
-        projects.setProjects(projectList);
+        projectList.forEach(project => {
+            let newProject = new Project(project.name);
+            newProject.setTasks(project.tasks);
+            projects.addProject(newProject);
+        });
+        // projects.setProjects(projectList);
         return projects;
     }
 }
@@ -72,6 +72,12 @@ export function addTaskToStorage() {
 
 export function removeTaskFromStorage(index) {
     // let tasks =  Storage.getTask();
+    let taskProject = tasks.getTasks()[index].project
+    let taskId = tasks.getTasks()[index].id
+    if(taskProject !== '') {
+       removeTaskFromProject(taskProject, taskId)
+    }
+
     tasks.deleteTask(index);
     localStorage.setItem('task', JSON.stringify(tasks.getTasks()));
     
@@ -80,6 +86,20 @@ export function removeTaskFromStorage(index) {
     // taskList.splice(index, 1);
     // localStorage.setItem('task', JSON.stringify(taskList));
 }   
+
+function removeTaskFromProject(taskProject, taskId) {
+    let project = projects.findProject(taskProject);
+       let task;
+       project.tasks.forEach((item,index) => {
+           if(item.id === taskId) {
+               task = index;
+           }
+       }) 
+       console.log(task);
+
+       project.deleteTask(task);
+       localStorage.setItem('project', JSON.stringify(projects.getProjects()))
+}
 
 export function editTaskInStorage(index, editTask, editDate) {
     tasks.editTask(index, editTask, editDate);
@@ -137,6 +157,15 @@ export function addTaskToProject(newTask) {
 }
 
 export function deleteTaskFromProject(index) {
-    projects.deleteTask(index);
+    let project = projects.getProject(currentProjectIndex);
+    disassociateTaskFromInbox(project, index);
+
+    project.deleteTask(index);
+    // projects.getProject(currentProjectIndex).deleteTask(index);
     localStorage.setItem('project', JSON.stringify(projects.getProjects()));
+}
+
+function disassociateTaskFromInbox(project, index) {
+    let taskId = project.getTask(index).id
+    tasks.findTask(taskId).project = ''
 }
