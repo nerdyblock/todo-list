@@ -11,10 +11,16 @@ document.addEventListener('click', function(e) {
         let taskParent = document.querySelector('.edit-form');
         let editTask = taskParent.querySelector('#task');
         let editDate = taskParent.querySelector('#date');   
-        // let id = editTask.dataset.id;
+        let id = editTask.dataset.id;
         let index = editTask.dataset.key;
+
         if(editTask.value !== '' && editDate.value !== '') {
-            editTaskInStorage(index, editTask.value, editDate.value);
+            let editData = {
+                name : editTask.value,
+                dueDate : editDate.value,
+                id : Number(id)
+            }
+            editTaskInStorage(editData, index);
             closeForm();
         }
     }
