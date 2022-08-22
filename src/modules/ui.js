@@ -47,7 +47,6 @@ function getCurrentTaskList() {
 
 export function uiShowTask() {
     let taskList = getCurrentTaskList();
-    console.log(taskList)
     todo.innerHTML = '';
     taskList.forEach((element, index) => {
         let dom = selectDomElements();
