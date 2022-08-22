@@ -95,14 +95,39 @@ function removeTaskFromProject(taskProject, taskId) {
                task = index;
            }
        }) 
-       console.log(task);
 
        project.deleteTask(task);
        localStorage.setItem('project', JSON.stringify(projects.getProjects()))
 }
 
-export function editTaskInStorage(index, editTask, editDate) {
-    tasks.editTask(index, editTask, editDate);
+export function editTaskInStorage(editData, index) {
+    // if(currentProjectIndex === "") {
+    //     if(tasks.getTask(index).project === '') {
+    //         editTaskInInbox(index, editData);
+    //     }
+    //     else {
+    //         let taskId = tasks.getTask(index).id
+    //         let project = tasks.getTask(index).project
+
+    //         selectedProject = projects.getProjectIndex(project);
+    //         selectedProject.findTaskIndex(taskId)
+    //     }
+        
+    // }
+
+    if(currentProjectIndex !== '') {
+        let project = projects.getProjects()[currentProjectIndex];
+        editTaskInProject(project, editData)
+    }
+
+
+    let containsProject = tasks.getTask(index).project
+    if(containsProject !== '') {
+        let project = projects.findProject(containsProject);
+        editTaskInProject(project, editData)
+    }
+
+    editTaskInInbox(editData)
     // let taskList = JSON.parse(localStorage.getItem('task'));
     // taskList.forEach(item => {
     //     if(item.taskId === id) {
@@ -110,7 +135,17 @@ export function editTaskInStorage(index, editTask, editDate) {
     //         item.dueDate = editDate;
     //     }
     // });
+   
+}
+
+function editTaskInInbox(editData) {
+    tasks.editTask(editData);
     localStorage.setItem('task', JSON.stringify(tasks.getTasks()));
+}
+
+function editTaskInProject(project, editData) {
+    project.editTask(editData);
+    localStorage.setItem('project', JSON.stringify(projects.getProjects()));
 }
 
 let projectName = document.querySelector('#project-name');
@@ -167,5 +202,6 @@ export function deleteTaskFromProject(index) {
 
 function disassociateTaskFromInbox(project, index) {
     let taskId = project.getTask(index).id
-    tasks.findTask(taskId).project = ''
+    tasks.findTask(taskId).project = '';
+    localStorage.setItem('task', JSON.stringify(tasks.getTasks()));
 }
