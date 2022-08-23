@@ -60,17 +60,22 @@ function selectEditandDeleteTask() {
 function removeTask(e) {
     let taskToBeDeleted = e.target.closest('.task');
     let title = taskToBeDeleted.querySelector('.title');
-    // let idToBeDeleted = title.getAttribute('id');
+    let idToBeDeleted = title.dataset.id;
 
     let index = title.dataset.key;
 
-    if(getCurrentProjectIndex()) {
+    if(getCurrentProjectIndex() === 'today') {
+        removeTaskFromStorage(idToBeDeleted);
+        uiShowTask();
+        return;
+    }
+    else if(getCurrentProjectIndex()) {
         deleteTaskFromProject(index);
         uiShowTask();
         return;
     }
 
-    removeTaskFromStorage(index);
+    removeTaskFromStorage(idToBeDeleted, index);
     // JSON.parse(localStorage.getItem('task')).forEach((item, i) => {
     //     if(item.id === idToBeDeleted) {
     //         removeTaskFromStorage(i);
@@ -134,6 +139,13 @@ document.querySelector('#inbox').addEventListener('click', function() {
     selectCurrentProject('');
     uiShowTask();
 });
+
+document.querySelector('.nav').addEventListener('click', function(e) {
+    if(e.target.id === 'today') {
+        selectCurrentProject('today');
+        uiShowTask();
+    }
+})
 
 const projectListContainer = document.querySelector('.project-list-container');
 projectListContainer.addEventListener('click', function(e) {
