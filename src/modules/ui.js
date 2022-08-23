@@ -1,4 +1,5 @@
-import { getCurrentProjectIndex, getListFromStorage } from "./storage";
+import { Storage, getCurrentProjectIndex, getListFromStorage } from "./storage";
+import Todo from "./todo";
 
 const todo = document.getElementById('todo');
 
@@ -37,6 +38,10 @@ function getCurrentTaskList() {
     let currentProjectIndex = getCurrentProjectIndex();
     if(currentProjectIndex === '') {
         taskList = getListFromStorage('task');
+    }
+    else if(currentProjectIndex === 'today') {
+        const tasks = Storage.getTask();
+        taskList = tasks.getTodayTask();
     }
     else {
         taskList = getListFromStorage('project')[currentProjectIndex].tasks;
