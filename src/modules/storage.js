@@ -10,7 +10,7 @@ export function getListFromStorage(itemName) {
     return JSON.parse(localStorage.getItem(itemName)) || [];
 }
 
-class Storage {
+export class Storage {
     static getTask() {
         let tasks = new Todo();
         let taskList = getListFromStorage('task');
@@ -70,15 +70,24 @@ export function addTaskToStorage() {
     // localStorage.setItem('task', JSON.stringify(taskList));
 }
 
-export function removeTaskFromStorage(index) {
+export function removeTaskFromStorage(taskId, index) {
     // let tasks =  Storage.getTask();
-    let taskProject = tasks.getTasks()[index].project
-    let taskId = tasks.getTasks()[index].id
+    let task = tasks.findTask(taskId);
+    let taskProject = task.project;
+
+    // let taskProject = tasks.getTasks()[index].project
+    // let taskId = tasks.getTasks()[index].id
     if(taskProject !== '') {
        removeTaskFromProject(taskProject, taskId)
     }
 
-    tasks.deleteTask(index);
+    if(index) {
+        tasks.deleteTask(index);
+    }
+    else {
+        tasks.deleteTaskById(taskId);
+    }
+    
     localStorage.setItem('task', JSON.stringify(tasks.getTasks()));
     
 
