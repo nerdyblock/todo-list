@@ -43,6 +43,10 @@ function getCurrentTaskList() {
         const tasks = Storage.getTask();
         taskList = tasks.getTodayTask();
     }
+    else if(currentProjectIndex === 'upcoming') {
+        const tasks = Storage.getTask();
+        taskList = tasks.getUpcomingTask();
+    }
     else {
         taskList = getListFromStorage('project')[currentProjectIndex].tasks;
     }
@@ -76,7 +80,7 @@ export function uiShowEditForm() {
             <input id="task" data-key="${index}" data-id="${id}" type="text" placeholder="Task" value="${title}" required>
             <input type="date" name="date" id="date" value="${date}" required>
             <textarea name="description" id="description" cols="20" rows="10" placeholder="description"></textarea>
-            <button id="save-changes">Save Changes</button>
+            <button type="button" id="save-changes">Save Changes</button>
         </form>
     `
     editForm.innerHTML = editUi;
