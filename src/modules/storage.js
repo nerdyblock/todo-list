@@ -7,7 +7,7 @@ const taskInput = document.getElementById('task');
 const dateInput = document.getElementById('date');
 
 export function getListFromStorage(itemName) {
-    return JSON.parse(localStorage.getItem(itemName)) || [];
+    return (JSON.parse(localStorage.getItem(itemName)) || []);
 }
 
 export class Storage {
@@ -77,6 +77,13 @@ export function removeTaskFromStorage(taskId, index) {
 
     // let taskProject = tasks.getTasks()[index].project
     // let taskId = tasks.getTasks()[index].id
+
+    // if(taskProject !== '') {
+    //     removeTaskFromProject(taskProject, taskId)
+    //     getProjectTask(taskProject)
+    // }
+ 
+
     if(taskProject !== '') {
        removeTaskFromProject(taskProject, taskId)
     }
@@ -98,15 +105,16 @@ export function removeTaskFromStorage(taskId, index) {
 
 function removeTaskFromProject(taskProject, taskId) {
     let project = projects.findProject(taskProject);
-       let task;
-       project.tasks.forEach((item,index) => {
-           if(item.id === taskId) {
-               task = index;
-           }
-       }) 
+    //    let task;
+    //    project.tasks.forEach((item,index) => {
+    //        if(item.id === taskId) {
+    //            task = index;
+    //        }
+    //    })    
 
-       project.deleteTask(task);
-       localStorage.setItem('project', JSON.stringify(projects.getProjects()))
+
+    project.deleteTask(taskId);
+    localStorage.setItem('project', JSON.stringify(projects.getProjects()))
 }
 
 export function editTaskInStorage(editData, index) {
@@ -123,20 +131,42 @@ export function editTaskInStorage(editData, index) {
     //     }
         
     // }
-
-    if(currentProjectIndex !== '') {
-        let project = projects.getProjects()[currentProjectIndex];
-        editTaskInProject(project, editData)
-    }
-
-
-    let containsProject = tasks.getTask(index).project
-    if(containsProject !== '') {
-        let project = projects.findProject(containsProject);
-        editTaskInProject(project, editData)
-    }
-
+    
     editTaskInInbox(editData)
+    
+    let projectName
+    let containsProject = tasks.getTask(index).project
+    if(containsProject != '') {
+        projectName = containsProject
+        getProjectTask(projectName)
+    }
+    if(currentProjectIndex !== '') {
+        projectName = projects.getProject(currentProjectIndex).name;
+        getProjectTask(projectName)
+    }
+
+
+    // if(currentProjectIndex !== '') {
+    //     projectName = projects.getProject(currentProjectIndex).name;
+    //     projectTasks = tasks.getProjectTasks(projectName);
+    //     projects.getProject(currentProjectIndex).setTasks(projectTasks);
+    //     localStorage.setItem('project', JSON.stringify(projects.getProjects()))
+    // }
+
+
+    // if(currentProjectIndex !== '') {
+    //     let project = projects.getProjects()[currentProjectIndex];
+    //     editTaskInProject(project, editData)
+    // }
+
+
+    // let containsProject = tasks.getTask(index).project
+    // if(containsProject !== '') {
+    //     let project = projects.findProject(containsProject);
+    //     editTaskInProject(project, editData)
+    // }
+
+    
     // let taskList = JSON.parse(localStorage.getItem('task'));
     // taskList.forEach(item => {
     //     if(item.taskId === id) {
@@ -145,6 +175,12 @@ export function editTaskInStorage(editData, index) {
     //     }
     // });
    
+}
+
+function getProjectTask(projectName) {
+    let projectTasks = tasks.getProjectTasks(projectName);
+    projects.findProject(projectName).setTasks(projectTasks);
+    localStorage.setItem('project', JSON.stringify(projects.getProjects()))
 }
 
 function editTaskInInbox(editData) {
@@ -200,17 +236,22 @@ export function addTaskToProject(newTask) {
     // project.tasks();
 }
 
-export function deleteTaskFromProject(index) {
+export function deleteTaskFromProject(id, index) {
     let project = projects.getProject(currentProjectIndex);
-    disassociateTaskFromInbox(project, index);
+    disassociateTaskFromInbox(id);
 
-    project.deleteTask(index);
+    // project.deleteTask(id);
+    if(index) {
+        project.deleteTaskByIndex(index);
+    }
     // projects.getProject(currentProjectIndex).deleteTask(index);
     localStorage.setItem('project', JSON.stringify(projects.getProjects()));
 }
 
-function disassociateTaskFromInbox(project, index) {
-    let taskId = project.getTask(index).id
+function disassociateTaskFromInbox(taskId) {
+    // let task = project.findTask(taskid).id;
+    // taskId = task.id;
+    // let taskId = project.findTask(taskId).id
     tasks.findTask(taskId).project = '';
     localStorage.setItem('task', JSON.stringify(tasks.getTasks()));
 }
