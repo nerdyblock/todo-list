@@ -2,6 +2,7 @@
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
+    user-select: none;
 }
 
 header {
@@ -36,13 +37,11 @@ header {
 }
 
 .add-project-input {
-    display: flex;
-    flex-direction: column;
-    transform: scale(0);
+    display: none;
 }
 
 .add-project-input.active {
-    transform: scale(1);
+    display: block;
 }
 
 .title-container {
