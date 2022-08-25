@@ -22,6 +22,7 @@ document.addEventListener('click', function(e) {
             }
             editTaskInStorage(editData, index);
             closeForm();
+            uiShowTask();
         }
     }
 })
@@ -39,7 +40,8 @@ function onTaskSubmit() {
     
 }
 
-// console.log(JSON.parse(localStorage.getItem('task')));
+console.log(JSON.parse(localStorage.getItem('task')));
+console.log(JSON.parse(localStorage.getItem('project')));
 // localStorage.clear('task');
 
 document.getElementById('todo').addEventListener('mousemove', selectEditandDeleteTask);
@@ -64,13 +66,14 @@ function removeTask(e) {
 
     let index = title.dataset.key;
 
-    if(getCurrentProjectIndex() === 'today') {
+    if(getCurrentProjectIndex() === 'today' || 
+    getCurrentProjectIndex() === 'upcoming') {
         removeTaskFromStorage(idToBeDeleted);
         uiShowTask();
         return;
     }
     else if(getCurrentProjectIndex()) {
-        deleteTaskFromProject(index);
+        deleteTaskFromProject(idToBeDeleted, index);
         uiShowTask();
         return;
     }
@@ -100,7 +103,7 @@ const addProjectButton = document.querySelector('.add-project-button');
 
 addProjectButton.addEventListener('click', addProjectToStorage);
 addProjectButton.addEventListener('click', closeProjectForm);
-console.log(JSON.parse(localStorage.getItem('project')))
+// console.log(JSON.parse(localStorage.getItem('project')))
 addProjectButton.addEventListener('click', uiShowProject);
 document.addEventListener('DOMContentLoaded', uiShowProject);
 
@@ -143,6 +146,10 @@ document.querySelector('#inbox').addEventListener('click', function() {
 document.querySelector('.nav').addEventListener('click', function(e) {
     if(e.target.id === 'today') {
         selectCurrentProject('today');
+        uiShowTask();
+    }
+    if(e.target.id === 'upcoming') {
+        selectCurrentProject('upcoming');
         uiShowTask();
     }
 })
