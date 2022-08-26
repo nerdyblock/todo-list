@@ -53,8 +53,12 @@ export function addTaskToStorage() {
     }
 
     let newTask = new Task(taskInput.value, dateInput.value, (new Date()).getMilliseconds());
-    addTaskToProject(newTask);
+    
     tasks.addTask(newTask);
+    // addTaskToProject(newTask);
+    addTaskToProject(newTask.id);
+
+    
     localStorage.setItem('task', JSON.stringify(tasks.getTasks()));
 
     
@@ -72,7 +76,7 @@ export function addTaskToStorage() {
 
 export function removeTaskFromStorage(taskId, index) {
     // let tasks =  Storage.getTask();
-    let task = tasks.findTask(taskId);
+    let task = tasks.getTask(index);
     let taskProject = task.project;
 
     // let taskProject = tasks.getTasks()[index].project
@@ -91,9 +95,9 @@ export function removeTaskFromStorage(taskId, index) {
     if(index) {
         tasks.deleteTask(index);
     }
-    else {
-        tasks.deleteTaskById(taskId);
-    }
+    // else {
+    //     tasks.deleteTaskById(taskId);
+    // }
     
     localStorage.setItem('task', JSON.stringify(tasks.getTasks()));
     
@@ -134,16 +138,19 @@ export function editTaskInStorage(editData, index) {
     
     editTaskInInbox(editData)
     
-    let projectName
-    let containsProject = tasks.getTask(index).project
-    if(containsProject != '') {
-        projectName = containsProject
-        getProjectTask(projectName)
-    }
+    // let projectName
+    // let containsProject = tasks.getTask(index).project
+    // if(containsProject != '') {
+    //     projectName = containsProject
+    //     getProjectTask(projectName)
+    // }
     if(currentProjectIndex !== '') {
-        projectName = projects.getProject(currentProjectIndex).name;
-        getProjectTask(projectName)
+        editTaskInInbox(editData)
+        // projectName = projects.getProject(currentProjectIndex).name;
+        // getProjectTask(projectName)
     }
+
+
 
 
     // if(currentProjectIndex !== '') {
@@ -228,7 +235,10 @@ export function addTaskToProject(newTask) {
     if(currentProjectIndex === '') {
         return;
     }
-    newTask.setProject(projects.getProject(currentProjectIndex).name)
+    
+    let task = tasks.findTask(newTask)
+    task.project = projects.getProject(currentProjectIndex).name;
+    // newTask.setProject(projects.getProject(currentProjectIndex).name)
     projects.getProject(currentProjectIndex).tasks.push(newTask);
     // console.log(projects.getProjects())
     localStorage.setItem('project', JSON.stringify(projects.getProjects()));
