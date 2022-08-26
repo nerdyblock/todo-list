@@ -48,10 +48,17 @@ function getCurrentTaskList() {
         taskList = tasks.getUpcomingTask();
     }
     else {
-        taskList = getListFromStorage('project')[currentProjectIndex].tasks;
+        taskList = getProjectTasks();
+        // taskList = getListFromStorage('project')[currentProjectIndex].tasks;
     }
 
     return taskList;
+}
+
+function getProjectTasks() {
+    let tasks = getListFromStorage('task');
+    let taskIds = getListFromStorage('project')[getCurrentProjectIndex()].tasks;
+    return taskIds.map(item => tasks.find(task => task.id === item));
 }
 
 export function uiShowTask() {
