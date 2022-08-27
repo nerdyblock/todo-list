@@ -38,6 +38,9 @@ export default class ProjectList {
         return taskIndex;
     }
 
+    deleteProjectByIndex(index) {
+        this.projects.splice(index, 1);
+    }
 
     // should not be here should be in Project class
     // deleteTask(index) {
