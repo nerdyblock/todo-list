@@ -57,9 +57,10 @@ header {
 }
 
 .left,
-.right {
+.right,
+.project-item {
     display: flex;
-    gap: 2em;
+    gap: 3em;
     align-items: center;
 }
 
