@@ -1,5 +1,5 @@
 import './styles/style.css';
-import {addTaskToStorage, removeTaskFromStorage, editTaskInStorage, addProjectToStorage, selectCurrentProject, getCurrentProjectIndex, deleteTaskFromProject} from './modules/storage';
+import {addTaskToStorage, removeTaskFromStorage, editTaskInStorage, addProjectToStorage, selectCurrentProject, getCurrentProjectIndex, deleteTaskFromProject, deleteProject} from './modules/storage';
 import { uiShowTask, uiShowEditForm, uiShowProject} from './modules/ui';
 
 const add = document.getElementById('add');
@@ -45,6 +45,14 @@ console.log(JSON.parse(localStorage.getItem('project')));
 // localStorage.clear('task');
 
 document.getElementById('todo').addEventListener('mousemove', selectEditandDeleteTask);
+
+// const projectContainer = document.querySelector('.project-container');
+// projectContainer.addEventListener('click', function(e) {
+//     if(e.target.id === "project-delete") {
+//         let key = e.target.previousElementSibling.dataset.key;
+//         deleteProject(key);
+//     }
+// })
 
 function selectEditandDeleteTask() {
     todo.querySelectorAll('[data-delete]').forEach(item => {
@@ -157,7 +165,22 @@ document.querySelector('.nav').addEventListener('click', function(e) {
 const projectListContainer = document.querySelector('.project-list-container');
 projectListContainer.addEventListener('click', function(e) {
     // let selectedProject = e.target.closest('[data-project]').id;
+
     let index = e.target.dataset.key;
+
+    if(e.target.id === "project-delete") {
+        let key = e.target.parentElement.dataset.key;
+        deleteProject(key);
+        uiShowProject();
+        if(index === key) {
+            index = ''
+        }
+        else {
+            return
+        }
+    }
+
+    
     selectCurrentProject(index);
     uiShowTask();
     // uiShowProjectTasks(index);

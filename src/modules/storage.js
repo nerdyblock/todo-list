@@ -265,3 +265,15 @@ function disassociateTaskFromInbox(taskId) {
     tasks.findTask(taskId).project = '';
     localStorage.setItem('task', JSON.stringify(tasks.getTasks()));
 }
+
+export function deleteProject(index) {
+    let projectTaskList = projects.getProject(index).getTasks();
+    if(projectTaskList.length !== 0) {
+        projectTaskList.forEach(item => {
+            disassociateTaskFromInbox(item);
+        })
+    }
+    
+    projects.deleteProjectByIndex(index);
+    localStorage.setItem('project', JSON.stringify(projects.getProjects()));
+}

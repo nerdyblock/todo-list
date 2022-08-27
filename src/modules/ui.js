@@ -97,8 +97,9 @@ let projectContainer = document.querySelector('.project-list-container');
 
 function uiGenerateProject() {
     projectContainer.innerHTML += `
-        <div class="project-item" data-project>
+        <div class="project-item" data-key="" data-project>
             <h2 class="project-name" data-key=""></h2>
+            <button class="project-delete" id="project-delete" data-project-delete>&#10060;</button>
         </div>
     `
 } 
@@ -110,9 +111,10 @@ export function uiShowProject() {
         uiGenerateProject();
         let projectName = document.querySelector('.project-list-container > .project-item:last-child .project-name');
         projectName.textContent = item.name;
-        projectName.dataset.key = index
+        projectName.dataset.key = index;
 
         projectName.parentElement.setAttribute('id', item.name);
+        projectName.parentElement.dataset.key = index;
     });
 }
 
