@@ -56,6 +56,35 @@ header {
     padding: 5px 180px 5px 0px;
 }
 
+.task.done p {
+    text-decoration: line-through;
+}
+
+.task.done {
+    color: #9b9898
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: #ddd;
+    width: 1.15em;
+    height: 1.15em;
+    /* -webkit-appearance: none;
+    appearance: none;
+    width: 1.45em;
+    height: 1.45em;
+    border: 0.15em solid black;
+    border-radius: 0.15em;
+    display: flex;
+    justify-content: center;
+    align-items: center; */
+}
+
+/* input[type="checkbox"]:checked::before {
+    content: "\002714";
+    padding: 0.2em;
+} */
+
 .left,
 .right,
 .project-item {
