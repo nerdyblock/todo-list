@@ -1,36 +1,23 @@
 import { Storage, getCurrentProjectIndex, getListFromStorage } from "./storage";
-import Todo from "./todo";
 
 const todo = document.getElementById('todo');
+const projectContainer = document.querySelector('.project-list-container');
 
 
-function generateTaskUi() 
-{
+function generateTaskUi(element, index) {
     todo.innerHTML += `
-        <div class="task">
+        <div class="task" data-id="${element.id}">
             <div class="right">
-                <div class="status" data-status></div>
-                <p class="title" data-key="" data-id="" data-title></p>
+                <input type="checkbox" name="task-status" id="task-status">
+                <p class="title" data-key="${index}" data-id="${element.id}" data-title>${element.name}</p>
             </div>
             <div class="left">
                 <button id="edit">edit</button>
-                <p class="date" data-date></p>
+                <p class="date" data-date>${element.dueDate}</p>
                 <button class="task-delete" data-delete>&#10060;</button>
             </div>
         </div>
     `
-
-}
-
-function selectDomElements() {
-    generateTaskUi();
-    let title = document.querySelector('#todo > .task:last-child [data-title]');
-    let duedate = document.querySelector('#todo > .task:last-child [data-date]');
-
-    return {
-        title, 
-        duedate,
-    };
 }
 
 function getCurrentTaskList() {
@@ -49,7 +36,6 @@ function getCurrentTaskList() {
     }
     else {
         taskList = getProjectTasks();
-        // taskList = getListFromStorage('project')[currentProjectIndex].tasks;
     }
 
     return taskList;
@@ -65,12 +51,30 @@ export function uiShowTask() {
     let taskList = getCurrentTaskList();
     todo.innerHTML = '';
     taskList.forEach((element, index) => {
-        let dom = selectDomElements();
-        dom.title.textContent = element.name;
-        dom.duedate.textContent = element.dueDate;
-        dom.title.dataset.key = index;
-        dom.title.dataset.id = element.id;
+        generateTaskUi(element, index);
+        uiSetTaskStatus(element);
     });
+    checkTask();
+}
+
+
+function uiSetTaskStatus(task) {
+    let taskDiv = document.querySelector('#todo > .task:last-child');
+    if(task.status === 'done'){
+        taskDiv.classList.add('done');
+        return;
+    }
+
+    taskDiv.classList.remove('done')
+}
+
+function checkTask() {
+    document.querySelectorAll('.task').forEach(item => {
+        let task = item.querySelector('#task-status');
+
+        item.classList.contains('done') ? task.checked = true : 
+            task.checked = false;
+    })
 }
 
 export function uiShowEditForm() {
@@ -79,52 +83,35 @@ export function uiShowEditForm() {
     let title = task.querySelector('[data-title]').textContent;
     let date = task.querySelector('[data-date').textContent;
     let id = task.querySelector('[data-title]').dataset.id;
-
     let index = task.querySelector('[data-title]').dataset.key;
 
-    let editUi = `
+    editForm.innerHTML = editUi({title, date, id, index});
+}
+
+function editUi(editData) {
+    return `
         <form class="edit-form">
-            <input id="task" data-key="${index}" data-id="${id}" type="text" placeholder="Task" value="${title}" required>
-            <input type="date" name="date" id="date" value="${date}" required>
+            <input id="task" data-key="${editData.index}" data-id="${editData.id}" type="text" placeholder="Task" value="${editData.title}" required>
+            <input type="date" name="date" id="date" value="${editData.date}" required>
             <textarea name="description" id="description" cols="20" rows="10" placeholder="description"></textarea>
             <button type="button" id="save-changes">Save Changes</button>
         </form>
     `
-    editForm.innerHTML = editUi;
 }
-
-let projectContainer = document.querySelector('.project-list-container');
-
-function uiGenerateProject() {
-    projectContainer.innerHTML += `
-        <div class="project-item" data-key="" data-project>
-            <h2 class="project-name" data-key=""></h2>
-            <button class="project-delete" id="project-delete" data-project-delete>&#10060;</button>
-        </div>
-    `
-} 
 
 export function uiShowProject() {
     let projectList = getListFromStorage('project');
     projectContainer.innerHTML = "";
     projectList.forEach((item, index) => {
-        uiGenerateProject();
-        let projectName = document.querySelector('.project-list-container > .project-item:last-child .project-name');
-        projectName.textContent = item.name;
-        projectName.dataset.key = index;
-
-        projectName.parentElement.setAttribute('id', item.name);
-        projectName.parentElement.dataset.key = index;
+        uiGenerateProject(item, index);
     });
 }
 
-// export function uiShowProjectTasks(index) {
-//     let taskList = getListFromStorage('project')[index].tasks
-//     todo.innerHTML = '';
-//     taskList.forEach(element => {
-//         let dom = selectDomElements();
-//         dom.title.textContent = element.name;
-//         dom.duedate.textContent = element.dueDate;
-//         dom.title.dataset.key = index;
-//     })
-// }
+function uiGenerateProject(item, index) {
+    projectContainer.innerHTML += `
+        <div class="project-item" id="${item.name}" data-key="${index}" data-project>
+            <h2 class="project-name" data-key="${index}">${item.name}</h2>
+            <button class="project-delete" id="project-delete" data-project-delete>&#10060;</button>
+        </div>
+    `
+} 
