@@ -1,9 +1,10 @@
 export default class Task {
-    constructor(name, dueDate, id, project="") {
+    constructor(name, dueDate, id, project="", status="") {
       this.name = name
       this.dueDate = dueDate
       this.id = id
       this.project = project
+      this.status = status
     }
     
     setProject(projectName) {
@@ -24,12 +25,5 @@ export default class Task {
   
     getDate() {
       return this.dueDate
-    }
-
-    getDateFormatted() {
-      const day = this.dueDate.split('-')[0]
-      const month = this.dueDate.split('-')[1]
-      const year = this.dueDate.split('-')[2]
-      return `${year}-${month}-${day}`
     }
   }
