@@ -7,6 +7,9 @@ const taskInput = document.getElementById('task');
 const dateInput = document.getElementById('date');
 const projectName = document.querySelector('#project-name');
 
+
+let currentProjectIndex = 'inbox';
+
 export function getListFromStorage(itemName) {
     return (JSON.parse(localStorage.getItem(itemName)) || []);
 }
@@ -53,18 +56,15 @@ export function addTaskToStorage() {
     setListInStorage('task', tasks.getTasks())
 }
 
-export function removeTaskFromStorage(taskId, index) {
-    let task = tasks.getTask(index);
+export function removeTaskFromStorage(taskId) {
+    let task = tasks.findTask(taskId);
     let taskProject = task.project;
 
     if(taskProject !== '') {
        removeTaskFromProject(taskProject, taskId)
     }
 
-    if(index) {
-        tasks.deleteTask(index);
-    }
-    
+    tasks.deleteTaskById(taskId);
     setListInStorage('task', tasks.getTasks())
 }   
 
@@ -91,7 +91,7 @@ export function addProjectToStorage() {
     setListInStorage('project', projects.getProjects())
 }
 
-let currentProjectIndex = '';
+
 
 export function selectCurrentProject(index) {
     currentProjectIndex = index;
@@ -102,7 +102,7 @@ export function getCurrentProjectIndex() {
 }
 
 export function addTaskToProject(newTask) {
-    if(currentProjectIndex === '') {
+    if(currentProjectIndex === 'inbox') {
         return;
     }
     
