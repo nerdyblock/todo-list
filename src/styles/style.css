@@ -6,15 +6,8 @@
 }
 
 header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 10px 40px;
-}
-
-.add-task {
-    font-size: 2.5rem;
-    font-weight: 500;
+    margin-bottom: 30px;
 }
 
 .nav {
@@ -27,6 +20,7 @@ header {
 
 .content {
     display: grid;
+    gap: 3em;
     grid-template-columns: 1fr 4fr;
 }
 
@@ -49,11 +43,30 @@ header {
     gap: 1em;
 }
 
+.todo-container {
+    margin: 15px 0px;
+}
+
 .task {
     display: flex;
     gap: 2em;
     justify-content: space-between;
     padding: 5px 180px 5px 0px;
+}
+
+#add-task-button {
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px 180px 5px 0px;
+}
+
+.add-task {
+    margin-top: 20px;
+    border: none;
+    padding: 2px 22px;
+    border-radius: 10px;
+    font-size: 2rem;
+    font-weight: 700;
 }
 
 .task.done p {
@@ -86,10 +99,24 @@ input[type="checkbox"] {
 } */
 
 .left,
-.right,
-.project-item {
+.right {
     display: flex;
     gap: 3em;
+    align-items: center;
+}
+
+.project-container {
+    width: 100%;
+}
+
+.project-list-container {
+    margin-bottom: 15px;
+}
+
+.project-item {
+    display: flex;
+    /* gap: 3em; */
+    justify-content: space-between;
     align-items: center;
 }
 
