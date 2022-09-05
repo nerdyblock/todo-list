@@ -11,9 +11,6 @@
         <div>
             <h1>Todo</h1>
         </div>
-        <div>
-            <button class="add-task">&plus;</button>
-        </div>
     </header>
     <div class="content">
         <div class="nav">
@@ -23,7 +20,7 @@
             <button id="projects">Projects</button>
             <div class="project-container">
                 <div class="project-list-container"></div>
-                <div class="add-project-input">
+                <div class="add-project-input" id="add-project-form">
                     <input id="project-name" type="text" required>
                     <div class="button-container">
                         <button class="add-project-button">Add</button>
@@ -32,8 +29,14 @@
                 </div>
                 <button class="add-project">&plus;</button>
             </div>
+        </div>
+        <div id="task-list-container">
+            <h1 id="tasklist-heading">inbox</h1>
+            <div id="todo" class="todo-container"></div>
+            <div id="add-task-button">
+                <button class="add-task">&plus;</button>
+            </div>
         </div>        
-        <div id="todo" class="todo-container"></div>
     </div>
     <div class="form-container">
         <form action="">
