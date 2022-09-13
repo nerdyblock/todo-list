@@ -14,16 +14,16 @@
     </header>
     <div class="content">
         <div class="nav">
-            <button id="inbox">Inbox</button>
-            <button id="today">Today</button>
-            <button id="upcoming">Upcoming</button>
-            <button id="projects">Projects</button>
+            <div class="nav-options" id="Inbox">Inbox</div>
+            <div class="nav-options" id="Today">Today</div>
+            <div class="nav-options" id="Upcoming">Upcoming</div>
+            <div id="projects">Projects</div>
             <div class="project-container">
                 <div class="project-list-container"></div>
                 <div class="add-project-input" id="add-project-form">
                     <input id="project-name" type="text" required>
                     <div class="button-container">
-                        <button class="add-project-button">Add</button>
+                        <button class="add-project-button" id="add-project-button">Add</button>
                         <button class="cancel-project">Cancel</button>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div id="task-list-container">
-            <h1 id="tasklist-heading">inbox</h1>
+            <h1 id="tasklist-heading">Inbox</h1>
             <div id="todo" class="todo-container"></div>
             <div id="add-task-button">
                 <button class="add-task">&plus;</button>
@@ -47,6 +47,7 @@
         </form>
     </div>
     <div class="edit-task-form"></div>
+    <div class="description-container"></div>
     <div class="overlay"></div>
 </body>
 </html>
