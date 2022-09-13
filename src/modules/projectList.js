@@ -1,5 +1,3 @@
-import { getCurrentProjectIndex } from "./storage";
-
 export default class ProjectList {
     constructor() {
         this.projects = [];
@@ -18,33 +16,21 @@ export default class ProjectList {
     }
 
     getProject(index) {
-        // requiredProject = this.projects.find(project => {
-        //     project.name === projectName;
-        // });
-        // return requiredProject;
-
         return this.projects[index];
     }
 
     findProject(projectName) {
-        let requiredProject = this.projects.find(project =>
+        return this.projects.find(project =>
             project.name === projectName );
-        return requiredProject;
     }
 
     getProjectIndex(projectName) {
-        let taskIndex = this.projects.findIndex(project =>
-            project.name === projectName);
-        return taskIndex;
+        return this.projects.findIndex(project =>
+            project.name === projectName);;
     }
 
     deleteProjectByIndex(index) {
         this.projects.splice(index, 1);
     }
-
-    // should not be here should be in Project class
-    // deleteTask(index) {
-    //     this.projects[getCurrentProjectIndex()].
-    // }
    
 }

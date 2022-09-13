@@ -27,7 +27,6 @@ export default class Todo {
    }
 
    deleteTask(index) {
-    //    let taskToBeDeleted = this.tasks.find(element => element.id === taskId);
        this.tasks.splice(index, 1);
    }
 
@@ -37,8 +36,6 @@ export default class Todo {
    }
 
    editTask(editData) {
-    //    this.tasks[index].name = editData.name;
-    //    this.tasks[index].dueDate = editData.dueDate;
         this.tasks.forEach(item => {
             if(item.id === editData.id) {
                 item.name = editData.name;

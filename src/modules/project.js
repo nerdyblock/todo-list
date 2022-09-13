@@ -21,25 +21,15 @@ export default class Project {
     }
 
     findTask(id) {
-        let task = this.tasks.find(item =>
+        return this.tasks.find(item =>
             item.id === id);
-        return task;
     }
 
     deleteTask(id) {
-        this.tasks = this.tasks.filter(item => item.id != id);
+        this.tasks = this.tasks.filter(item => item != id);
     }
 
     deleteTaskByIndex(index) {
         this.tasks.splice(index, 1);
-    }
-
-    editTask(editData) {
-        this.tasks.forEach(item => {
-            if(item.id === editData.id) {
-                item.name = editData.name;
-                item.dueDate = editData.dueDate;
-            }
-       });
     }
 }
