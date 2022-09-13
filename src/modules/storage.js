@@ -5,10 +5,10 @@ import Todo from "./todo.js";
 
 const taskInput = document.getElementById('task');
 const dateInput = document.getElementById('date');
+const descriptionInput = document.getElementById('description')
 const projectName = document.querySelector('#project-name');
 
-
-let currentProjectIndex = 'inbox';
+let currentProjectIndex = 'Inbox';
 
 export function getListFromStorage(itemName) {
     return (JSON.parse(localStorage.getItem(itemName)) || []);
@@ -48,7 +48,7 @@ export function addTaskToStorage() {
         return;
     }
 
-    let newTask = new Task(taskInput.value, dateInput.value, (new Date()).getMilliseconds());
+    let newTask = new Task(taskInput.value, dateInput.value, descriptionInput.value, (new Date()).getMilliseconds());
     
     tasks.addTask(newTask);
     addTaskToProject(newTask.id);
@@ -102,7 +102,7 @@ export function getCurrentProjectIndex() {
 }
 
 export function addTaskToProject(newTask) {
-    if(currentProjectIndex === 'inbox') {
+    if(currentProjectIndex === 'Inbox') {
         return;
     }
     

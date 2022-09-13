@@ -1,13 +1,31 @@
 import { Storage, getCurrentProjectIndex, getListFromStorage, deleteTaskFromProject, addTaskToStorage, editTaskInStorage, selectCurrentProject, toggleTaskStatus, addProjectToStorage, deleteProject, removeTaskFromStorage} from "./storage";
+import format from "date-fns/format";
 import editIcon from '../assets/edit.svg';
 import deleteIcon from '../assets/delete.svg';
+
+const addTaskButton = document.querySelector('.add-task');
+const overlay = document.querySelector('.overlay');
+const addTaskForm = document.querySelector('.form-container');
+const editTaskForm = document.querySelector('.edit-task-form');
+const descriptionContainer = document.querySelector('.description-container');
+
+const projectListContainer = document.querySelector('.project-list-container');
+const inboxButton = document.querySelector('#Inbox');
+const todayButton = document.querySelector('#Today');
+const upcomingButton = document.querySelector('#Upcoming');
+
+const showProjectFormButton = document.querySelector('.add-project');
+const addProjectInput = document.querySelector('.add-project-input');
+const addProjectButton = document.getElementById('add-project-button');
+const cancelProject = document.querySelector('.cancel-project');
+
 
 export class Ui {
     static loadInbox() {
         uiShowTask();
         uiShowProject();
-        Ui.showProjects();
         Ui.initInboxButtons();
+        Ui.addProjects();
         Ui.initAddProjectButton();
         Ui.showProjectTasks();
         Ui.showTaskCompleted();
@@ -25,10 +43,12 @@ export class Ui {
             item.addEventListener('click', Ui.removeTask);
         });
         todo.querySelectorAll('#edit').forEach(item => {
-            item.addEventListener('click', uiShowEditForm)
-            item.addEventListener('click', function() {
-                Ui.initFormButtons().openEditForm();
-            });
+            item.addEventListener('click', uiShowEditForm);
+            item.addEventListener('click', openEditForm);
+        });
+        todo.querySelectorAll('#details').forEach(item => {
+            item.addEventListener('click', uiShowTaskDescription);
+            item.addEventListener('click', openDescription);
         });
         Ui.showEditTask()
     }
@@ -36,7 +56,7 @@ export class Ui {
     static removeTask(e) {
         let idToBeDeleted = e.target.closest('.task').dataset.id;
         let index = e.target.closest('.task').dataset.key;
-        let currentProjectIndex = getCurrentProjectIndex()
+        let currentProjectIndex = Number(getCurrentProjectIndex()) 
 
         if(Number.isInteger(currentProjectIndex)) {
             deleteTaskFromProject(idToBeDeleted, index);
@@ -61,11 +81,6 @@ export class Ui {
     }
     
     static initFormButtons() {
-        const addTaskButton = document.querySelector('.add-task');
-        const overlay = document.querySelector('.overlay');
-        const addTaskForm = document.querySelector('.form-container');
-        const editTaskForm = document.querySelector('.edit-task-form');
-    
         addTaskButton.addEventListener('click', openAddTaskForm);
         overlay.addEventListener('click', closeForm);
 
@@ -73,22 +88,16 @@ export class Ui {
             overlay.classList.add('active');
             addTaskForm.classList.add('active');
         }
-
-        function openEditForm() {
-            overlay.classList.add('active');
-            editTaskForm.classList.add('active');
-        }
     
         function closeForm() {
             overlay.classList.remove('active');
             addTaskForm.classList.remove('active');
         
-            // change this 
             editTaskForm.classList.remove('active'); 
+            descriptionContainer.classList.remove('active');
         }
 
         return {
-            openEditForm,
             openAddTaskForm,
             closeForm
         }
@@ -118,17 +127,16 @@ export class Ui {
     }
 
     static showProjectTasks() {
-        const projectListContainer = document.querySelector('.project-list-container');
-        const inboxButton = document.querySelector('#inbox')
-        const todayButton = document.querySelector('#today')
-        const upcomingButton = document.querySelector('#upcoming')
-
         inboxButton.addEventListener('click', showProjectTasks)
         todayButton.addEventListener('click', showProjectTasks)
         upcomingButton.addEventListener('click', showProjectTasks)
 
         projectListContainer.querySelectorAll('.project-item').forEach(project => {
-            project.addEventListener('click', function() {
+            project.addEventListener('click', function(e) {
+                if(e.target.classList.contains('project-delete')) {
+                    return;
+                }
+
                 let projectId = project.id;
                 let projectIndex = project.dataset.key;
 
@@ -137,27 +145,6 @@ export class Ui {
                 uiShowTask();
             })
         })
-        // document.querySelector('.project-list-container').addEventListener('click',function(e) {
-        //     let currentProjectIndex = e.target.dataset.key
-        //     selectCurrentProject(currentProjectIndex)
-        //     uiShowTask()
-        // })
-        // document.querySelector('.nav').addEventListener('click', function(e) {
-        //     let currentProject = e.target.id;
-
-        //     if(currentProject !== 'inbox' && 
-        //         currentProject !== 'today' && 
-        //         currentProject !== 'upcoming') {
-        //             currentProject = e.target.dataset.key;
-        //     }
-            
-        //     if(!currentProject) {
-        //         return
-        //     }
-
-        //     selectCurrentProject(currentProject);
-        //     uiShowTask();
-        // });
     }
 
     static showTaskCompleted() {
@@ -171,13 +158,10 @@ export class Ui {
     }
 
     static initAddProjectButton() {
-        const showProjectFormButton = document.querySelector('.add-project');
-        const addProjectInput = document.querySelector('.add-project-input');
-        const cancelProject = document.querySelector('.cancel-project');
-
         showProjectFormButton.addEventListener('click', openProjectForm);
         cancelProject.addEventListener('click', closeProjectForm);
 
+        
         function openProjectForm() {    
             addProjectInput.classList.add('active');
         }
@@ -186,56 +170,56 @@ export class Ui {
             addProjectInput.classList.remove('active');
         }
 
-        Ui.projectDelete();
-
         return {
             openProjectForm,
             closeProjectForm
         }
     }
 
-    static showProjects() {
-        const addProjectButton = document.querySelector('.add-project-button');
-
+    static addProjects() {
         addProjectButton.addEventListener('click', function() {
             addProjectToStorage();
             Ui.initAddProjectButton().closeProjectForm();
             uiShowProject();
+            // Ui.showProjectTasks();
         });
     }
 
     static projectDelete() {
-        const projectListContainer = document.querySelector('.project-list-container');
-        projectListContainer.addEventListener('click', function(e) {
-            let index = e.target.dataset.key;
+        projectListContainer.querySelectorAll('[data-project-delete]')
+            .forEach(project => {
+                project.addEventListener('click', function(e) {
+                    let index = getCurrentProjectIndex();
+                    let key =  e.target.closest('[data-project]').dataset.key;
+                    deleteProject(key);
+                    uiShowProject();
+            
+                    if(index !== key) {
+                        return
+                    }
+            
+                    index = 'inbox'
 
-            if(e.target.id === "project-delete") {
-                let key = e.target.parentElement.dataset.key;
-                deleteProject(key);
-                uiShowProject();
-            
-                if(index !== key) {
-                    return
-                }
-            
-                index = ''
-            }
-        
-        
-            selectCurrentProject(index);
-            uiShowTask();
-        });
+                    selectCurrentProject(index);
+                    uiShowTask();
+                });
+            });
     }
 }
 
 
+function openDescription() {
+    overlay.classList.add('active');
+    descriptionContainer.classList.add('active');
+}
 
-
-
+function openEditForm() {
+    overlay.classList.add('active');
+    editTaskForm.classList.add('active');
+}
 
 
 const todo = document.getElementById('todo');
-const projectContainer = document.querySelector('.project-list-container');
 const taskListHeading = document.querySelector('#tasklist-heading');
 
 function showProjectTasks(e) {
@@ -245,7 +229,19 @@ function showProjectTasks(e) {
     uiShowTask();
 }
 
+function removeHighlight() {
+    document.querySelectorAll('.nav .nav-selected').forEach(item => {
+        item.classList.remove('nav-selected');
+    })
+}
+
+function highlightCurrentProject(title) {
+    removeHighlight()
+    document.getElementById(title).classList.add('nav-selected');
+}
+
 function showProjectTitle(title) {
+    highlightCurrentProject(title);
     taskListHeading.textContent = title;
 }
 
@@ -256,12 +252,14 @@ function generateTaskUi(element, index) {
             <div class="right">
                 <input type="checkbox" name="task-status" id="task-status">
                 <p class="title" data-key="${index}" data-id="${element.id}" data-title>${element.name}</p>
+                <p class="description" data-desc style="display:none;">${element.description}</p>
             </div>
             <div class="left">
+                <button id="details">Details</button>
                 <button id="edit">
                     <img src="${editIcon}" alt="">
                 </button>
-                <p class="date" data-date>${element.dueDate}</p>
+                <p class="date" data-date>${format(new Date(element.dueDate), 'dd MMM yyyy')}</p>
                 <button class="task-delete" data-delete>
                     <img src="${deleteIcon}" alt="">
                 </button>
@@ -273,22 +271,26 @@ function generateTaskUi(element, index) {
 function getCurrentTaskList() {
     let taskList;
     let currentProjectIndex = getCurrentProjectIndex();
-    if(currentProjectIndex === 'inbox') {
+    if(currentProjectIndex === 'Inbox') {
         taskList = getListFromStorage('task');
     }
-    else if(currentProjectIndex === 'today') {
+    else if(currentProjectIndex === 'Today') {
         const tasks = Storage.getTask();
         taskList = tasks.getTodayTask();
     }
-    else if(currentProjectIndex === 'upcoming') {
+    else if(currentProjectIndex === 'Upcoming') {
         const tasks = Storage.getTask();
         taskList = tasks.getUpcomingTask();
     }
     else {
         taskList = getProjectTasks();
     }
+    
+    return sortTaskList(taskList);
+}   
 
-    return taskList;
+function sortTaskList(taskList) {
+    return taskList.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate))
 }
 
 function getProjectTasks() {
@@ -338,42 +340,62 @@ function checkTask() {
     })
 }
 
+function uiShowTaskDescription() {
+    let task = this.closest('.task');
+    let title = task.querySelector('[data-title]').textContent;
+    let date = task.querySelector('[data-date]').textContent;
+    let description = task.querySelector('[data-desc]').innerText;
+
+    descriptionContainer.innerHTML = generateDescription({title, date, description})
+}
+
+function generateDescription(descData) {
+    return `
+        <h1>${descData.title}</h1>
+        <h3>${format(new Date(descData.date), 'dd MMM yyyy')}</h3>
+        <p>${descData.description}</p>
+    `
+}
+
 export function uiShowEditForm() {
     const editForm = document.querySelector('.edit-task-form');
     let task = this.closest('.task');
-    let title = task.querySelector('[data-title]').textContent;
-    let date = task.querySelector('[data-date').textContent;
+    let title = task.querySelector('[data-title]').innerText;
+    let desc = task.querySelector('[data-desc]').textContent;
+    let date = task.querySelector('[data-date').innerText;
     let id = task.querySelector('[data-title]').dataset.id;
     let index = task.querySelector('[data-title]').dataset.key;
 
-    editForm.innerHTML = editUi({title, date, id, index});
+    editForm.innerHTML = editUi({title, date, desc, id, index});
 }
 
 function editUi(editData) {
     return `
         <form class="edit-form">
             <input id="task" data-key="${editData.index}" data-id="${editData.id}" type="text" placeholder="Task" value="${editData.title}" required>
-            <input type="date" name="date" id="date" value="${editData.date}" required>
-            <textarea name="description" id="description" cols="20" rows="10" placeholder="description"></textarea>
+            <input type="date" name="date" id="date" value="${format(new Date(editData.date), 'yyyy-MM-dd')}" required>
+            <textarea name="description" id="description" cols="20" rows="10" placeholder="description">${editData.desc}</textarea>
             <button type="button" id="save-changes">Save Changes</button>
         </form>
     `
 }
 
-export function uiShowProject() {
+function uiShowProject() {
     let projectList = getListFromStorage('project');
-    projectContainer.innerHTML = "";
+    projectListContainer.innerHTML = "";
     projectList.forEach((item, index) => {
         uiGenerateProject(item, index);
     });
+    Ui.showProjectTasks();
+    Ui.projectDelete();
 }
 
 function uiGenerateProject(item, index) {
-    projectContainer.innerHTML += `
+    projectListContainer.innerHTML += `
         <div class="project-item" id="${item.name}" data-key="${index}" data-project>
             <h2 class="project-name" data-key="${index}">${item.name}</h2>
             <button class="project-delete" id="project-delete" data-project-delete>
-                <img src="${deleteIcon}" alt="">
+                <img class="project-delete" src="${deleteIcon}" alt="">
             </button>
         </div>
     `
