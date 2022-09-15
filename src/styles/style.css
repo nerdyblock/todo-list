@@ -3,6 +3,7 @@
     --header-color: rgb(239, 248, 250);
     --nav-color: rgb(247, 241, 241); 
     --nav-highlight: rgb(202, 212, 243);
+    font-size: 16px;
 }
 
 * {
@@ -16,6 +17,34 @@
     user-select: none;
 }
 
+
+/* css meyer reset */
+
+html, body, div
+{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+:focus {
+	outline: 0;
+}
+
+body {
+	line-height: 1;
+	color: black;
+	background: white;
+}
+
+/* Header */
+
 header {
     padding: 20px 40px;
     background-color: var(--header-background-color);
@@ -28,8 +57,17 @@ header h1 {
 }
 
 button {
+    cursor: pointer;
     border: none;
 }
+
+.content {
+    display: grid;
+    gap: 2em;
+    grid-template-columns: 1.2fr 4fr;
+}
+
+/* nav bar */
 
 .nav {
     background-color: var(--nav-color);
@@ -41,29 +79,15 @@ button {
     gap: 0.2em;
 }
 
+.nav-options,
 .nav #projects {
-    font-size: 1.8rem;
-    font-weight: 700;
-}
-
-.content {
-    display: grid;
-    gap: 2em;
-    grid-template-columns: 1.2fr 4fr;
-}
-
-.nav-options {
+    cursor: pointer;
     border-radius: 8px;
-    padding: 5px;
+    padding: 10px;
     margin-bottom: 8px;
     width: 100%;
-    font-size: 1.7rem;
-    font-weight: 600;
-}
-
-#projects {
-    padding: 5px;
-    margin-bottom: 8px;
+    font-size: 1.8em;
+    font-weight: 700;
 }
 
 .nav-options:hover,
@@ -79,10 +103,41 @@ button {
     background-color: var(--nav-color);
 }
 
+.nav .project-delete img {
+    width: 1.5em;
+}
+
 .nav-selected .project-delete,
 .project-item:hover .project-delete {
     background-color: var(--nav-highlight);
 }
+
+.project-container {
+    width: 100%;
+}
+
+.project-list-container {
+    margin-left: 10px;
+    margin-bottom: 15px;
+}
+
+.project-item {
+    cursor: pointer;
+    margin-left: 8px;
+    margin-bottom: 4px;
+    padding: 8px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-item h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+
+/* Task List Container */
 
 #task-list-container {
     padding: 20px;
@@ -97,44 +152,19 @@ button {
     margin: 15px 0px;
 }
 
+.left,
+.right {
+    display: flex;
+    gap: 3em;
+    align-items: center;
+}
+
 .task {
     display: flex;
     gap: 2em;
     font-size: 1.2em;
     justify-content: space-between;
     padding: 5px 180px 5px 0px;
-}
-
-#edit,
-.task-delete {
-    background-color: #fff;
-}
-
-#details {
-    padding: 4px 8px;
-    font-size: 0.8em;
-    font-weight: 700;
-    border-radius: 3px;
-    background-color: var(--nav-highlight);
-}
-
-#add-task-button {
-    display: flex;
-    justify-content: flex-end;
-    padding: 5px 180px 5px 0px;
-}
-
-.add-task {
-    margin-top: 20px;
-    padding: 2px 22px;
-    border-radius: 10px;
-    font-size: 2rem;
-    font-weight: 700;
-}
-
-.task.done #details {
-    background-color: rgb(201, 209, 238);
-    color: #636161;
 }
 
 .task.done p {
@@ -145,9 +175,11 @@ button {
     color: #9b9898;
 }
 
+/* task done checkbox */
+
 input[type="checkbox"] {
     cursor: pointer;
-    accent-color: #ddd;
+    accent-color: #ddd; 
     width: 1.15em;
     height: 1.15em;
     /* -webkit-appearance: none;
@@ -166,31 +198,55 @@ input[type="checkbox"] {
     padding: 0.2em;
 } */
 
-.left,
-.right {
-    display: flex;
-    gap: 3em;
-    align-items: center;
+#edit,
+.task-delete {
+    padding: 2px;
+    background-color: #fff;
 }
 
-.project-container {
-    width: 100%;
+.task-delete img {
+    width: 1.4em;
 }
 
-.project-list-container {
-    margin-left: 10px;
-    margin-bottom: 15px;
-}
-
-.project-item {
-    margin-left: 8px;
-    padding: 8px;
+#edit:hover,
+.task-delete:hover {
+    background-color: #ddd;
     border-radius: 5px;
-    margin-bottom: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
+
+#details {
+    padding: 4px 8px;
+    font-size: 0.8em;
+    font-weight: 700;
+    border-radius: 3px;
+    background-color: var(--nav-highlight);
+}
+
+.task.done #details,
+#details:hover {
+    background-color: rgb(201, 209, 238);
+    color: #636161;
+}
+
+#add-task-button {
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px 180px 5px 0px;
+}
+
+.add-task {
+    margin-top: 20px;
+    padding: 2px 22px;
+    border-radius: 10px;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.add-task:hover {
+    background-color: #ddd;
+}
+
+/* project pop-up form */
 
 .add-project-input {
     display: none;
@@ -229,7 +285,7 @@ input[type="checkbox"] {
 }
 
 .add-project {
-    padding: 10px 18px;
+    padding: 2px 20px;
     font-size: 2.5rem;
     font-weight: 900;
     background-color: var(--nav-color);
@@ -238,6 +294,27 @@ input[type="checkbox"] {
 
 .add-project:hover {
     background-color: var(--nav-highlight);
+}
+
+/* pop-up forms */
+
+.description-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: 200ms ease-in-out;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    width: min(50%, 400px);
+    display: flex;
+    flex-direction: column;
+    font-weight: 700;
+    gap: 0.8em;
+    justify-content: center;
+    align-items: flex-start;
+    z-index: 10;
 }
 
 .form-container,
@@ -259,23 +336,12 @@ input[type="checkbox"] {
     z-index: 10;
 }
 
-.description-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    transition: 200ms ease-in-out;
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    width: min(50%, 400px);
+form {
     display: flex;
     flex-direction: column;
-    font-weight: 700;
-    gap: 0.8em;
+    gap: 1em;
     justify-content: center;
-    align-items: flex-start;
-    z-index: 10;
+    align-items: center;
 }
 
 .edit-task-form button,
@@ -285,7 +351,13 @@ input[type="checkbox"] {
     font-size: 1.1em;
     font-weight: 700;
     border-radius: 10px;
-    background-color: rgb(208, 218, 252);
+    background-color: var(--nav-highlight);
+}
+
+#add:hover,
+#save-changes:hover {
+    background-color: rgb(145, 182, 185);
+    color: #000;
 }
 
 .edit-task-form input,
@@ -296,14 +368,6 @@ input[type="checkbox"] {
     padding: 4px 6px;
     border-radius: 5px;
     background-color: #f0f5f4;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    justify-content: center;
-    align-items: center;
 }
 
 .form-container.active,
